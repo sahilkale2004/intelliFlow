@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.21",
+    "axios": "^1.8.4",
     "data-fns": "^1.1.0",
     "lucide-react": "^0.483.0",
     "react": "^18.3.1",
