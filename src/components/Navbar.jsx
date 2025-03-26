@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Calendar, CheckSquare, BarChart2, Layout } from 'lucide-react';
+import { Calendar, CheckSquare, BarChart2, Layout, LogIn } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -11,6 +11,7 @@ const Navbar = () => {
     { path: '/events', label: 'Events', icon: Calendar },
     { path: '/tasks', label: 'Tasks', icon: CheckSquare },
     { path: '/analytics', label: 'Analytics', icon: BarChart2 },
+    {path: '/login', label: 'Login', icon: LogIn},
   ];
 
   return (
