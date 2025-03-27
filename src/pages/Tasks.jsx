@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CheckCircle2, Clock, AlertCircle, XCircle, Save, PlusCircle } from "lucide-react";
 import "./Tasks.css";
+import TaskAllocator from "../components/TaskAllocator";
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -115,6 +116,7 @@ const Tasks = () => {
           </div>
         </div>
       )}
+    < TaskAllocator />  
     </div>
   );
 };
