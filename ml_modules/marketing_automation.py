@@ -3,11 +3,11 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
 import numpy as np
+import os
 from sklearn.neighbors import NearestNeighbors
 from textblob import TextBlob
 
-genai.configure("process.env.GEMINI_API_KEY)")
-
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 df = pd.read_csv("")
 
 df['Event Type'] = df['Event Type'].astype('category').cat.codes
