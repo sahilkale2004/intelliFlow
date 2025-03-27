@@ -6,9 +6,9 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from textblob import TextBlob
 
-genai.configure(api_key="AIzaSyAvRPZtY-2z2cdHh6tkvHYpDIJrkhb13tY")
+genai.configure("process.env.GEMINI_API_KEY)")
 
-df = pd.read_csv("sponsors_data.csv")
+df = pd.read_csv("")
 
 df['Event Type'] = df['Event Type'].astype('category').cat.codes
 df['Sponsor'] = df['Sponsor'].astype('category').cat.codes
