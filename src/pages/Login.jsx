@@ -32,7 +32,7 @@ const Login = () => {
         <div className="login-icon">
           <Calendar className="calendar-icon" />
         </div>
-        <h2 className="login-title">Sign in to EventAI</h2>
+        <h2 className="login-title">Sign in to IntelliFlow</h2>
         <form className="login-form" onSubmit={handleLogin}>
           <div className="input-group">
             <input

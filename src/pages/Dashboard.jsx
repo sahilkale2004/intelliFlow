@@ -4,9 +4,17 @@ import './Dashboard.css';
 import Chatbot from '../components/Chatbot';
 
 const Dashboard = () => (
-  <div className="dashboard-container">
-    <h1 className="dashboard-title">Event Planning Dashboard</h1>
-    
+  <div className="dashboard-container">  
+    <div className="dashboard-header">
+      <div className="dashboard-image">
+        <img src="/img/header1.jpg" alt="Event-Management" />
+        <div className="dashboard-text">
+          <h1>Event Management</h1>
+          <p>Plan, manage, and analyze events with ease</p>
+        </div>  
+      </div>  
+    </div>
+    <h1 className="dashboard-title">Dashboard</h1>
     <div className="dashboard-stats-grid">
       {[
         { title: 'Upcoming Events', value: '12', icon: Calendar, color: 'blue' },
