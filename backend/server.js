@@ -17,6 +17,7 @@ mongoose
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 
+  // Event Schema
 const eventSchema = new mongoose.Schema({
   title: String,
   date: String,
@@ -71,6 +72,38 @@ app.delete('/events/:id', async (req, res) => {
     res.status(200).json({ message: 'Event deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Task Schema
+const TaskSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  userName: String,
+  dueDate: String,
+  status: String,
+});
+
+const Task = mongoose.model("Task_details", TaskSchema);
+
+// Create Task
+app.post("/tasks", async (req, res) => {
+  try {
+    const newtask = new Task(req.body);
+    await newtask.save();
+    res.status(201).json({ message: 'Task created successfully', task: newtask });
+  } catch (err) {
+    res.status(500).json({ error: 'Error creating task', details: error });
+  }
+});
+
+// Get All Tasks
+app.get("/tasks", async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching tasks', details: error });
   }
 });
 
