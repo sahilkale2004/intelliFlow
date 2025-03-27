@@ -19,7 +19,7 @@ function TaskAllocator() {
     };
 
     return (
-        <div>
+        <div className="task-allocator-container">
             <h2>Task Allocation</h2>
             <input type="number" placeholder="Skills (0-Marketing, 1-Tech, 2-Finance, 3-Sponsorship)" onChange={(e) => setSkills(e.target.value)} />
             <input type="number" placeholder="Experience (Years)" onChange={(e) => setExperience(e.target.value)} />
