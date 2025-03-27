@@ -35,7 +35,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 35px;
+  gap: 60px;
 }
 
 .event-card {
@@ -128,26 +128,25 @@
   margin-top: 16px;
 }
 
-.view-details-button {
-  background-color: #4f46e5;
+.edit-event-button {
+  background-color: #3b82f6;
   color: white;
   padding: 8px 16px;
   border-radius: 6px;
   transition: transform 0.3s ease;
 }
 
-.view-details-button:hover {
-  background-color: #4338ca;
+.edit-event-button:hover {
+  background: #2563eb;
 }
-
-.edit-event-button {
-  border: 1px solid #d1d5db;
-  color: #374151;
+.delete-event-button {
+  background-color: #3b82f6;
+  color: white;
   padding: 8px 16px;
   border-radius: 6px;
   transition: transform 0.3s ease;
 }
 
-.edit-event-button:hover {
-  background: #05c779;
+.delete-event-button:hover {
+  background-color: #2563eb;
 }

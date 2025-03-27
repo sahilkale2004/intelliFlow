@@ -13,9 +13,10 @@ h2 {
     margin-bottom: 20px;
 }
 
-input[type="text"],
+input [type="text"],
 textarea {
-    width: 90%;
+    width: 100%;
+    max-width: 400px;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
@@ -30,7 +31,7 @@ textarea:focus {
     outline: none;
 }
 
-button {
+.marketing-container button {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
