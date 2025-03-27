@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Chatbot from './components/chatbot';
+import Chatbot from './components/Chatbot';
 import Dashboard from './pages/Dashboard';
 import Events from './pages/Events';
 import Tasks from './pages/Tasks';
