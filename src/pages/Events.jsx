@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, MapPin, Clock, Users } from 'lucide-react';
 import './Events.css';
+import MarketingAutomation from '../components/MarketingAutomation';
 
 const Events = () => (
   <div className="events-container">
@@ -73,6 +74,7 @@ const Events = () => (
         </div>
       ))}
     </div>
+    <MarketingAutomation />
   </div>
 );
 
