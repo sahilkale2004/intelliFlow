@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, Users, TrendingUp, Bell } from 'lucide-react';
 import './Dashboard.css';
+import Chatbot from '../components/Chatbot';
 
 const Dashboard = () => (
   <div className="dashboard-container">
@@ -59,6 +60,7 @@ const Dashboard = () => (
         </div>
       </div>
     </div>
+  < Chatbot />
   </div>
 );
 

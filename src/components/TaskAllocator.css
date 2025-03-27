@@ -1,0 +1,53 @@
+.task-allocator-container {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.task-allocator-container h2 {
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.task-allocator-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.task-allocator-container input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.task-allocator-container button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.task-allocator-container button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.task-allocator-container h3 {
+    margin-top: 20px;
+    color: #333;
+    font-size: 18px;
+}

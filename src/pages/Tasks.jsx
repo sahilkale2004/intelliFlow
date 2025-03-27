@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import './Tasks.css';
+import TaskAllocator from '../components/TaskAllocator';
 
 const Tasks = () => {
   return (
@@ -51,6 +52,7 @@ const Tasks = () => {
           </div>
         ))}
       </div>
+      < TaskAllocator />
     </div>
   );
 };
