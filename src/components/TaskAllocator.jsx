@@ -3,29 +3,64 @@ import axios from "axios";
 import "./TaskAllocator.css";
 
 function TaskAllocator() {
-    const [skills, setSkills] = useState("");
+    const [task, setTask] = useState("");
     const [experience, setExperience] = useState("");
     const [availability, setAvailability] = useState("");
     const [result, setResult] = useState("");
 
     const allocateTask = async () => {
-        const response = await axios.post("http://localhost:5001/allocate_task", {
-            skills: parseInt(skills),
-            experience: parseInt(experience),
-            availability: parseInt(availability),
-        });
+        if (!task.trim()) {
+            setResult("Error: Task is required.");
+            return;
+        }
+        if (!experience || isNaN(experience) || experience < 0) {
+            setResult("Error: Experience must be a valid non-negative number.");
+            return;
+        }
+        if (!availability || isNaN(availability) || availability < 0 || availability > 100) {
+            setResult("Error: Availability must be a valid number between 0 and 100.");
+            return;
+        }
 
-        setResult(response.data.result);
+        try {
+            const response = await axios.post("http://localhost:5001/allocate_task", {
+                task: task,
+                experience: parseInt(experience),
+                availability: parseInt(availability),
+            });
+            setResult(response.data.result);
+        } catch (error) {
+            console.error("Error allocating task:", error);
+            setResult("Error allocating task: " + (error.response?.data?.result || error.message));
+        }
     };
 
     return (
         <div className="task-allocator-container">
-            <h2>Task Allocation</h2>
-            <input type="number" placeholder="Skills (0-Marketing, 1-Tech, 2-Finance, 3-Sponsorship)" onChange={(e) => setSkills(e.target.value)} />
-            <input type="number" placeholder="Experience (Years)" onChange={(e) => setExperience(e.target.value)} />
-            <input type="number" placeholder="Availability (%)" onChange={(e) => setAvailability(e.target.value)} />
+            <h2>Task Allocator</h2>
+            <input
+                type="text"
+                placeholder="Enter Task (e.g., Manage PR)"
+                value={task}
+                onChange={(e) => setTask(e.target.value)}
+            />
+            <input
+                type="number"
+                placeholder="Enter Experience (Years)"
+                value={experience}
+                onChange={(e) => setExperience(e.target.value)}
+                min="0"
+            />
+            <input
+                type="number"
+                placeholder="Enter Availability (%)"
+                value={availability}
+                onChange={(e) => setAvailability(e.target.value)}
+                min="0"
+                max="100"
+            />
             <button onClick={allocateTask}>Allocate Task</button>
-            <h3>{result}</h3>
+            <p>{result}</p>
         </div>
     );
 }
