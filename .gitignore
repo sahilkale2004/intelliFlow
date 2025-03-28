@@ -13,6 +13,7 @@ node_modules
 # data files
 task_data.json
 sponsors_data.json
+analytics_data.json
 
 dist
 dist-ssr

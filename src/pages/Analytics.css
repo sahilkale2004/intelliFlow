@@ -146,3 +146,24 @@
   font-size: 14px;
   color: #2c5282;
 }
+
+.custom-tooltip {
+  background-color: white;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.tooltip-category {
+  font-weight: bold;
+  color: #333;
+}
+
+.tooltip-percentage {
+  color: #007bff;
+}
+
