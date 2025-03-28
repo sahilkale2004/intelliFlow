@@ -19,12 +19,12 @@ df = df.explode("Previous Events Supported")
 df['Event Type'] = df['Previous Events Supported'].astype('category').cat.codes
 df['Sponsor ID'] = df['Sponsor ID'].astype('category').cat.codes 
 
-# Train Model
+# Train Nearest Neighbors Model
 X = df[['Event Type']]
 model = NearestNeighbors(n_neighbors=3, metric='euclidean')
 model.fit(X)
 
-# Start the flask app
+# Start Flask app
 app = Flask(__name__)
 CORS(app)
 
@@ -59,21 +59,28 @@ def analyze_sentiment():
 # Sponsor Recommendation API
 @app.route('/recommend_sponsors', methods=['POST'])
 def recommend_sponsors():
-    """Recommend sponsors based on event type."""
-    data = request.json
-    event_type = data['event_type']
-    
-# event type to numerical encoding
-    event_code = df[df['Previous Events Supported'] == event_type]['Event Type'].unique()
-    
-    if len(event_code) == 0:
-        return jsonify({"error": "Event type not found"}), 400
+    try:
+        data = request.json
+        event_type = data.get('event_type')
 
-    input_data = np.array([[event_code[0]]])
-    distances, indices = model.kneighbors(input_data)
+        if not event_type:
+            return jsonify({"error": "Event type is required"}), 400
 
-    recommended_sponsors = df.iloc[indices[0]]['Sponsor Name'].tolist()
-    return jsonify({"recommended_sponsors": recommended_sponsors})
+        event_code = df[df['Previous Events Supported'] == event_type]['Event Type'].unique()
+
+        if len(event_code) == 0:
+            return jsonify({"error": "Event type not found"}), 404
+
+        input_data = pd.DataFrame([[event_code[0]]], columns=["Event Type"])
+        distances, indices = model.kneighbors(input_data)
+
+        recommended_sponsors = df.iloc[indices[0]][['Sponsor Name', 'Industry', 'Sponsorship Type', 'Average Sponsorship Amount']].to_dict(orient='records')
+
+        return jsonify({"sponsors": recommended_sponsors})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)

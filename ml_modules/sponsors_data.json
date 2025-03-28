@@ -5,6 +5,7 @@
     "Industry": "Tech",
     "Sponsorship Type": ["Financial", "Media"],
     "Previous Events Supported": ["Hackathons", "AI Conferences"],
+    "Event Type": [0, 1],
     "Average Sponsorship Amount (USD)": 50000
   },
   {
@@ -13,6 +14,7 @@
     "Industry": "Tech",
     "Sponsorship Type": ["Financial", "Product"],
     "Previous Events Supported": ["Coding Bootcamps", "Hackathons"],
+    "Event Type": [2, 0],
     "Average Sponsorship Amount (USD)": 40000
   },
   {
@@ -21,6 +23,7 @@
     "Industry": "Tech",
     "Sponsorship Type": ["Financial", "Hardware"],
     "Previous Events Supported": ["Hardware Hackathons", "IoT Events"],
+    "Event Type": [3, 4],
     "Average Sponsorship Amount (USD)": 35000
   },
   {
@@ -29,6 +32,7 @@
     "Industry": "Automotive",
     "Sponsorship Type": ["Financial", "Product"],
     "Previous Events Supported": ["GreenTech Events", "AI Conferences"],
+    "Event Type": [5, 1],
     "Average Sponsorship Amount (USD)": 60000
   },
   {
@@ -37,6 +41,7 @@
     "Industry": "Cloud Computing",
     "Sponsorship Type": ["Cloud Credits", "Financial"],
     "Previous Events Supported": ["Hackathons", "Startups"],
+    "Event Type": [0, 6],
     "Average Sponsorship Amount (USD)": 45000
   },
   {
@@ -45,78 +50,7 @@
     "Industry": "Software",
     "Sponsorship Type": ["Financial", "Product"],
     "Previous Events Supported": ["Design Competitions", "Workshops"],
+    "Event Type": [7, 8],
     "Average Sponsorship Amount (USD)": 25000
-  },
-  {
-    "Sponsor ID": 107,
-    "Sponsor Name": "Red Bull",
-    "Industry": "Beverage",
-    "Sponsorship Type": ["Product", "Media"],
-    "Previous Events Supported": ["Sports Events", "E-sports Tournaments"],
-    "Average Sponsorship Amount (USD)": 20000
-  },
-  {
-    "Sponsor ID": 108,
-    "Sponsor Name": "Nike",
-    "Industry": "Sports Apparel",
-    "Sponsorship Type": ["Financial", "Product"],
-    "Previous Events Supported": ["Marathons", "College Sports"],
-    "Average Sponsorship Amount (USD)": 30000
-  },
-  {
-    "Sponsor ID": 109,
-    "Sponsor Name": "PepsiCo",
-    "Industry": "FMCG",
-    "Sponsorship Type": ["Financial", "Product"],
-    "Previous Events Supported": ["Music Festivals", "College Fests"],
-    "Average Sponsorship Amount (USD)": 35000
-  },
-  {
-    "Sponsor ID": 110,
-    "Sponsor Name": "Sony",
-    "Industry": "Entertainment",
-    "Sponsorship Type": ["Financial", "Media"],
-    "Previous Events Supported": ["Gaming Events", "Film Festivals"],
-    "Average Sponsorship Amount (USD)": 55000
-  },
-  {
-    "Sponsor ID": 111,
-    "Sponsor Name": "Infosys",
-    "Industry": "IT Consulting",
-    "Sponsorship Type": ["Financial", "Mentorship"],
-    "Previous Events Supported": ["AI Summits", "Coding Competitions"],
-    "Average Sponsorship Amount (USD)": 20000
-  },
-  {
-    "Sponsor ID": 112,
-    "Sponsor Name": "Deloitte",
-    "Industry": "Consulting",
-    "Sponsorship Type": ["Financial", "Networking"],
-    "Previous Events Supported": ["Business Summits", "Case Competitions"],
-    "Average Sponsorship Amount (USD)": 50000
-  },
-  {
-    "Sponsor ID": 113,
-    "Sponsor Name": "Tata Motors",
-    "Industry": "Automotive",
-    "Sponsorship Type": ["Financial", "Product"],
-    "Previous Events Supported": ["Green Energy Conferences"],
-    "Average Sponsorship Amount (USD)": 40000
-  },
-  {
-    "Sponsor ID": 114,
-    "Sponsor Name": "ESPN",
-    "Industry": "Media & Sports",
-    "Sponsorship Type": ["Media", "Financial"],
-    "Previous Events Supported": ["College Sports Events", "E-sports"],
-    "Average Sponsorship Amount (USD)": 60000
-  },
-  {
-    "Sponsor ID": 115,
-    "Sponsor Name": "IBM",
-    "Industry": "Tech",
-    "Sponsorship Type": ["Financial", "Cloud Services"],
-    "Previous Events Supported": ["AI & Cloud Events"],
-    "Average Sponsorship Amount (USD)": 45000
   }
 ]
