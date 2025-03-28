@@ -19,14 +19,14 @@ function MarketingAutomation() {
     };
 
     const analyzeSentiment = async () => {
-        const response = await axios.post("http://localhost:5003/analyze_sentiment", {
+        const response = await axios.post("http://localhost:5002/analyze_sentiment", {
             comments: comments.split("\n"),
         });
         setSentimentResults(response.data.sentiments);
     };
 
     const recommendSponsors = async () => {
-        const response = await axios.post("http://localhost:5004/recommend_sponsors", {
+        const response = await axios.post("http://localhost:5002/recommend_sponsors", {
             event_type: 1, 
         });
         setSponsors(response.data.sponsors);
@@ -47,12 +47,24 @@ function MarketingAutomation() {
             {sentimentResults.map((res, index) => (
                 <p key={index}>{res.comment}: {res.sentiment}</p>
             ))}
-
+ 
+            <div>
+            <h2>Sponsor Recommendation</h2>
+            <input
+                type="text"
+                placeholder="Enter Event Type (e.g., Hackathons)"
+                value={eventType}
+                onChange={(e) => setEventType(e.target.value)}
+            />
             <button onClick={recommendSponsors}>Recommend Sponsors</button>
+
             <h3>Suggested Sponsors:</h3>
-            {sponsors.map((sponsor, index) => (
-                <p key={index}>{sponsor}</p>
-            ))}
+            {sponsors.length > 0 ? (
+                sponsors.map((sponsor, index) => <p key={index}>{sponsor}</p>)
+            ) : (
+                <p>No sponsors recommended yet.</p>
+            )}
+        </div>
         </div>
     );
 }

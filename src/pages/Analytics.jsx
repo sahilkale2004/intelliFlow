@@ -1,6 +1,7 @@
 import React from "react";
 import { BarChart2, PieChart, TrendingUp, Users } from "lucide-react";
 import "./Analytics.css";
+import EventAnalysis from "../components/EventAnalysis";
 
 const Analytics = () => (
   <div className="analytics-container">
@@ -61,6 +62,7 @@ const Analytics = () => (
         ))}
       </div>
     </div>
+    < EventAnalysis />
   </div>
 );
 
