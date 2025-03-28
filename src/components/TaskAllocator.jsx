@@ -37,7 +37,7 @@ function TaskAllocator() {
 
     return (
         <div className="task-allocator-container">
-            <h2>Task Allocator</h2>
+            <h2>Smart Task Allocator</h2>
             <input
                 type="text"
                 placeholder="Enter Task (e.g., Manage PR)"

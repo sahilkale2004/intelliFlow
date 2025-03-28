@@ -75,6 +75,7 @@ function MarketingAutomation() {
             <p>{generatedContent || "No content generated yet."}</p>
 
             {/* Sentiment Analysis */}
+            <h2>Smart Sentiment Analysis</h2>
             <textarea
                 placeholder="Enter Social Media Comments (One per line)"
                 value={comments}
