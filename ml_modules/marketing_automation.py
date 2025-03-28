@@ -15,9 +15,9 @@ with open("sponsors_data.json", "r") as file:
     data = json.load(file)
 df = pd.DataFrame(data)
 
-df = df.explode("Previous Events Supported") 
+df = df.explode("Previous Events Supported")
 df['Event Type'] = df['Previous Events Supported'].astype('category').cat.codes
-df['Sponsor ID'] = df['Sponsor ID'].astype('category').cat.codes 
+df['Sponsor ID'] = df['Sponsor ID'].astype('category').cat.codes
 
 # Train Nearest Neighbors Model
 X = df[['Event Type']]
@@ -36,7 +36,7 @@ def generate_content():
     event_details = data.get("event_details", "A hackathon with amazing prizes!")
     
     prompt = f"Generate an engaging social media post and email to promote {event_name}. Details: {event_details}"
-    model = genai.GenerativeModel("gemini-1.5-pro")  
+    model = genai.GenerativeModel("gemini-1.5-pro")
     response = model.generate_content(prompt)
     
     return jsonify({"content": response.text})
@@ -66,7 +66,11 @@ def recommend_sponsors():
         if not event_type:
             return jsonify({"error": "Event type is required"}), 400
 
-        event_code = df[df['Previous Events Supported'] == event_type]['Event Type'].unique()
+        # Normalize event_type to lowercase for comparison
+        event_type = event_type.strip().lower()
+
+        # Find the event code
+        event_code = df[df['Previous Events Supported'].str.lower() == event_type]['Event Type'].unique()
 
         if len(event_code) == 0:
             return jsonify({"error": "Event type not found"}), 404
@@ -74,13 +78,25 @@ def recommend_sponsors():
         input_data = pd.DataFrame([[event_code[0]]], columns=["Event Type"])
         distances, indices = model.kneighbors(input_data)
 
-        recommended_sponsors = df.iloc[indices[0]][['Sponsor Name', 'Industry', 'Sponsorship Type', 'Average Sponsorship Amount']].to_dict(orient='records')
+        # Get recommended sponsors
+        recommended_sponsors = df.iloc[indices[0]][['Sponsor Name', 'Industry', 'Sponsorship Type', 'Average Sponsorship Amount (USD)']].to_dict(orient='records')
 
-        return jsonify({"sponsors": recommended_sponsors})
+        # Rename keys for frontend compatibility
+        formatted_sponsors = [
+            {
+                "name": sponsor['Sponsor Name'],
+                "industry": sponsor['Industry'],
+                "sponsorship_type": sponsor['Sponsorship Type'],
+                "average_sponsorship_amount": sponsor['Average Sponsorship Amount (USD)']
+            }
+            for sponsor in recommended_sponsors
+        ]
+
+        return jsonify({"sponsors": formatted_sponsors})
 
     except Exception as e:
+        print(f"Error in recommend_sponsors: {str(e)}")
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)

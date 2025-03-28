@@ -6,12 +6,12 @@ function MarketingAutomation() {
     const [eventName, setEventName] = useState("");
     const [eventDetails, setEventDetails] = useState("");
     const [generatedContent, setGeneratedContent] = useState("");
-    const [sponsors, setSponsors] = useState([]); 
+    const [sponsors, setSponsors] = useState([]);
     const [comments, setComments] = useState("");
     const [sentimentResults, setSentimentResults] = useState([]);
     const [eventType, setEventType] = useState("");
 
-    // function to generate marketing content
+    // Function to generate marketing content
     const generateContent = async () => {
         try {
             const response = await axios.post("http://localhost:5002/generate_content", {
@@ -38,11 +38,11 @@ function MarketingAutomation() {
         }
     };
 
-    // Sponsors recommendation function based on event type
+    // Sponsors recommendation function based on[event_type]
     const recommendSponsors = async () => {
         try {
             const response = await axios.post("http://localhost:5002/recommend_sponsors", {
-                event_type: eventType,
+                event_type: eventType.trim().toLowerCase(),
             });
 
             console.log("API Response:", response.data);
@@ -117,7 +117,7 @@ function MarketingAutomation() {
                             <tr key={index}>
                                 <td>{sponsor.name}</td>
                                 <td>{sponsor.industry}</td>
-                                <td>{sponsor.sponsorship_type}</td>
+                                <td>{sponsor.sponsorship_type.join(', ')}</td>
                                 <td>{sponsor.average_sponsorship_amount}</td>
                             </tr>
                         ))}
