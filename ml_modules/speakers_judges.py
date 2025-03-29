@@ -55,6 +55,20 @@ def recommend():
     
     except Exception as e:
         return jsonify({"error": str(e), "recommendations": []}), 500
+    
+@app.route("/predict_budget", methods=["POST"])
+def predict_budget():
+    with open("budget_data.json", "r") as file:
+        past_budgets = json.load(file)
+
+    avg_budget = {
+        "venue_cost": sum(d["venue_cost"] for d in past_budgets) / len(past_budgets),
+        "marketing": sum(d["marketing"] for d in past_budgets) / len(past_budgets),
+        "speakers": sum(d["speakers"] for d in past_budgets) / len(past_budgets),
+        "misc": sum(d["misc"] for d in past_budgets) / len(past_budgets),
+    }
+
+    return jsonify({"optimized_budget": avg_budget})    
 
 if __name__ == '__main__':
     app.run(port=5005, debug=True)

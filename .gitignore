@@ -15,6 +15,7 @@ task_data.json
 sponsors_data.json
 analytics_data.json
 speakers_judges.json
+budget_data.json
 
 dist
 dist-ssr
