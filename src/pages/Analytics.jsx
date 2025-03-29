@@ -24,6 +24,11 @@ const AnalyticsDashboard = () => {
       .catch((error) => console.error("Error loading analytics data:", error));
   }, []);
 
+   // Function to clean AI insights
+  const cleanInsights = (insights) => {
+    return insights.map((insight) => "• " + insight.replace(/[*-]/g, "").trim());
+  };
+
   // Fetch AI insights data using API
   const fetchAiInsights = async (data) => {
     try {
@@ -31,7 +36,7 @@ const AnalyticsDashboard = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          attendees: data?.average_attendance || 0,
+          average_attendees: parseInt(data?.average_attendance || 0),
           budget_utilization: parseInt(data?.budget_utilization || 0),
           task_completion: parseInt(data?.task_completion || 0),
         }),
@@ -42,7 +47,7 @@ const AnalyticsDashboard = () => {
       }
 
       const result = await response.json();
-      setAiInsights(result.insights || []);
+      setAiInsights(cleanInsights(result.insights || []));
     } catch (error) {
       console.error("Error fetching AI insights:", error);
       setAiInsights(["Failed to fetch AI insights. Please try again."]);

@@ -6,36 +6,93 @@ function PostEventAnalysis() {
     const [feedback, setFeedback] = useState("");
     const [feedbackResults, setFeedbackResults] = useState([]);
     const [summary, setSummary] = useState("");
-    
+    const [eventName, setEventName] = useState("");
+    const [eventDate, setEventDate] = useState("");
+    const [eventLocation, setEventLocation] = useState("");
+
     const analyzeFeedback = async () => {
-        const response = await axios.post("http://localhost:5005/analyze_feedback", {
-            feedback: feedback.split("\n"),
-        });
-        setFeedbackResults(response.data.feedback_analysis);
+        if (!feedback.trim()) {
+            alert("Please enter feedback before analyzing.");
+            return;
+        }
+
+        try {
+            const response = await axios.post("http://localhost:5005/analyze_feedback", {
+                feedback: feedback.split("\n"),
+            });
+            setFeedbackResults(response.data.feedback_analysis);
+        } catch (error) {
+            console.error("Error analyzing feedback:", error);
+            alert("Failed to analyze feedback. Please try again.");
+        }
     };
 
     const generateSummary = async () => {
-        const response = await axios.post("http://localhost:5005/generate_event_summary", {
-            event_name: "TechFest 2025",
-        });
-        setSummary(response.data.summary);
+        if (!eventName.trim() || !eventDate.trim() || !eventLocation.trim()) {
+            alert("Please enter Event Name, Date, and Location to generate a summary.");
+            return;
+        }
+
+        try {
+            const response = await axios.post("http://localhost:5005/generate_event_summary", {
+                event_name: eventName,
+                event_date: eventDate,
+                event_location: eventLocation,
+            });
+            setSummary(response.data.summary);
+        } catch (error) {
+            console.error("Error generating summary:", error);
+            alert("Failed to generate event summary. Please try again.");
+        }
     };
 
     return (
         <div className="post-event-container">
             <h2>Post-Event Analysis</h2>
-
-            <textarea placeholder="Enter Feedback" onChange={(e) => setFeedback(e.target.value)} />
+            {/* Feedback Analysis Section */}
+            <textarea
+                placeholder="Enter Feedback"
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+            />
             <button onClick={analyzeFeedback}>Analyze Feedback</button>
-            
-            <h3>Feedback Sentiment Analysis:</h3>
-            {feedbackResults.map((res, index) => (
-                <p key={index}>{res.feedback}: {res.sentiment}</p>
-            ))}
 
+            <h3>Feedback Sentiment Analysis:</h3>
+            {feedbackResults.length > 0 ? (
+                feedbackResults.map((res, index) => (
+                    <p key={index}>
+                        {res.feedback}: <strong>{res.sentiment}</strong>
+                    </p>
+                ))
+            ) : (
+                <p>No feedback analysis yet.</p>
+            )}
+
+             {/* Event Input Fields */}
+            <div className="event-inputs">
+                <input
+                    type="text"
+                    placeholder="Enter Event Name"
+                    value={eventName}
+                    onChange={(e) => setEventName(e.target.value)}
+                />
+                <input
+                    type="date"
+                    placeholder="Select Event Date"
+                    value={eventDate}
+                    onChange={(e) => setEventDate(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Enter Event Location"
+                    value={eventLocation}
+                    onChange={(e) => setEventLocation(e.target.value)}
+                />
+            </div>
+            {/* Event Summary Generation */}
             <button onClick={generateSummary}>Generate Event Summary</button>
             <h3>Event Summary:</h3>
-            <p>{summary}</p>
+            <p>{summary || "No summary generated yet."}</p>
         </div>
     );
 }
