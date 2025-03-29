@@ -17,6 +17,19 @@ mongoose
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 
+// API to fetch upcoming events
+app.get('/upcoming-events', async (req, res) => {
+  try {
+    const upcomingEvents = await Event.find()
+      .sort({ date: 1 })
+      .limit(3);
+
+    res.json(upcomingEvents);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching events', error });
+  }
+});
+
   // Event Schema
 const eventSchema = new mongoose.Schema({
   title: String,
