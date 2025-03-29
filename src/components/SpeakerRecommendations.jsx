@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./speakers_judges.css";  
 
@@ -13,27 +13,30 @@ function SpeakersRecommendations() {
     // Fetch recommended speakers or judges
     const fetchRecommendations = async () => {
         try {
-            setError("");  
+            setError("");
             const response = await axios.post("http://localhost:5005/recommend_speakers", {
-                theme,
+                theme, 
                 budget: Number(budget),  
-                date,
                 role,
             });
-            
+
             console.log("API Response:", response.data);
+
             if (response.data.error) {
-                setError(response.data.error);  
+                setError(response.data.error);
                 setRecommendations([]);
             } else {
-                setRecommendations(response.data.recommendations || []);
+                setRecommendations([...response.data.recommendations || []]);
             }
         } catch (error) {
-            console.error("Error fetching recommendations:", error);
             setError("Failed to fetch recommendations. Please try again.");
             setRecommendations([]);
         }
     };
+
+    useEffect(() => {
+        console.log("Updated Recommendations:", recommendations);
+    }, [recommendations]);
 
     return (
         <div className="speaker-container">
@@ -69,8 +72,8 @@ function SpeakersRecommendations() {
                 <ul>
                     {recommendations.map((rec, index) => (
                         <li key={index}>
-                            <strong>{rec.name}</strong> - {rec.expertise} <br />
-                            Budget: ${rec.budget} | Rating: {rec.rating}/5
+                            <strong>{rec.Name}</strong> - {rec.Expertise} <br />
+                            Budget: ${rec.budget} | Rating: {rec.Rating}/5
                         </li>
                     ))}
                 </ul>

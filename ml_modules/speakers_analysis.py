@@ -11,50 +11,60 @@ def load_speakers_judges():
     try:
         with open('speakers_judges.json', 'r', encoding='utf-8') as file:
             data = json.load(file)
-        
-        # Convert to DataFrame
+
         df = pd.DataFrame(data)
-        
+
         # Ensure required columns exist
         required_fields = {"Name", "Role", "Expertise", "Experience", "budget", "Rating"}
         missing_fields = required_fields - set(df.columns)
-        
+
         if missing_fields:
-            print(f"Missing fields: {missing_fields}")
             return pd.DataFrame()  # Return empty DataFrame if fields are missing
-        
-        # Convert budget to float
+
+        # Convert budget and rating to numeric
         df["budget"] = pd.to_numeric(df["budget"], errors="coerce")
-    except Exception as e:
-        print(f"Error loading speakers and judges data: {e}")
-        return pd.DataFrame()  # Return empty DataFrame in case of an error       
+        df["Rating"] = pd.to_numeric(df["Rating"], errors="coerce")
+
+        return df
+
+    except Exception:
+        return pd.DataFrame()  # Return empty DataFrame in case of an error
 
 # Load data at startup
 df_speakers_judges = load_speakers_judges()
 
+# API to recommend speakers and judges based on theme, budget, and role
 @app.route('/recommend_speakers', methods=['POST'])
 def recommend():
     try:
         data = request.json
-        expertise = data.get("expertise")
-        budget = float(data.get("budget", 0))  # Ensure budget is numeric
-        
-        if expertise is None or budget == 0:
-            return jsonify({"error": "JSON data is missing required fields", "recommendations": []}), 400
+        theme = data.get("theme")
+        budget = data.get("budget")
+        role = data.get("role")
 
-        # Filter speakers/judges based on expertise and budget
+        # Validate input
+        if not theme or budget is None or not role:
+            return jsonify({"error": "Missing required fields: theme, budget, or role"}), 400
+
+        try:
+            budget = float(budget)
+        except ValueError:
+            return jsonify({"error": "Invalid budget format"}), 400
+
+        # Filter based on theme, budget, and role
         recommendations = df_speakers_judges[
-            (df_speakers_judges["Expertise"].str.contains(expertise, case=False, na=False)) & 
-            (df_speakers_judges["budget"] <= budget)
+            (df_speakers_judges["Expertise"].str.contains(theme, case=False, na=False)) &
+            (df_speakers_judges["budget"] <= budget) &
+            (df_speakers_judges["Role"].str.lower() == role.lower())
         ].sort_values(by="Rating", ascending=False)
 
         if recommendations.empty:
             return jsonify({"message": "No matching recommendations found", "recommendations": []})
-        
+
         return jsonify({"recommendations": recommendations.to_dict(orient="records")})
-    
-    except Exception as e:
-        return jsonify({"error": str(e), "recommendations": []}), 500
+
+    except Exception:
+        return jsonify({"error": "Internal server error"}), 500
     
 @app.route("/predict_budget", methods=["POST"])
 def predict_budget():
