@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Calendar, MapPin, Clock, Users, Edit, Trash, PlusCircle, RefreshCw, XCircle } from 'lucide-react';
 import './Events.css';
 import MarketingAutomation from '../components/MarketingAutomation';
+import SpeakerRecommendations from '../components/SpeakerRecommendations';
 import CreateEventForm from '../components/CreateEventForm';
 
 const Events = () => {
@@ -136,6 +137,7 @@ const Events = () => {
         ))}
       </div>
       <MarketingAutomation />
+      <SpeakerRecommendations />
     </div>
   );
 };
