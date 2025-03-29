@@ -2,20 +2,39 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const nodemailer = require('nodemailer');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cors());
 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173", 
+    methods: ["GET", "POST"],
+  },
+});
+
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI;
-
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Error connecting to MongoDB:', err));
+
+// Nodemailer Setup
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
 // API to fetch upcoming events
 app.get('/upcoming-events', async (req, res) => {
@@ -93,6 +112,7 @@ const TaskSchema = new mongoose.Schema({
   title: String,
   description: String,
   userName: String,
+  email: String,
   dueDate: String,
   status: String,
 });
@@ -102,11 +122,31 @@ const Task = mongoose.model("Task_details", TaskSchema);
 // Create Task
 app.post("/tasks", async (req, res) => {
   try {
-    const newtask = new Task(req.body);
-    await newtask.save();
-    res.status(201).json({ message: 'Task created successfully', task: newtask });
+    const newTask = new Task(req.body);
+    await newTask.save();
+
+    // Send Email Notification
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: newTask.email,
+      subject: `New Task Assigned: ${newTask.title}`,
+      text: `Hello ${newTask.userName},\n\nYou have been assigned a new task.\n\nTitle: ${newTask.title}\nDescription: ${newTask.description}\nDue Date: ${newTask.dueDate}\n\nPlease check your dashboard for details.\n\nBest Regards,\nEvent Management Team`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+
+    // Emit Task to WebSocket Clients
+    io.emit("new_task", newTask);
+
+    res.status(201).json({ message: "Task created successfully", task: newTask });
   } catch (err) {
-    res.status(500).json({ error: 'Error creating task', details: error });
+    res.status(500).json({ error: "Error creating task", details: err });
   }
 });
 
@@ -117,6 +157,44 @@ app.get("/tasks", async (req, res) => {
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: 'Error fetching tasks', details: error });
+  }
+});
+
+// Update Task & Send Email Notification
+app.put("/tasks/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedTask = await Task.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!updatedTask) return res.status(404).json({ message: "Task not found" });
+
+    io.emit("taskUpdated", updatedTask);
+
+    const emailMessage = `
+      <h3>Task Updated</h3>
+      <p><strong>Task Title:</strong> ${updatedTask.title}</p>
+      <p><strong>Description:</strong> ${updatedTask.description}</p>
+      <p><strong>Due Date:</strong> ${updatedTask.dueDate}</p>
+      <p>The task assigned to you has been updated.</p>
+    `;
+
+    sendEmail(updatedTask.email, "Task Updated Notification", emailMessage);
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete Task
+app.delete('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedTask = await Task.findByIdAndDelete(id);
+    if (!deletedTask) return res.status(404).json({ message: 'Event not found' });
+    res.status(200).json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
