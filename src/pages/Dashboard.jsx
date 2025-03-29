@@ -47,11 +47,17 @@ const Dashboard = () => {
   // Fetch AI insights data
   useEffect(() => {
   fetch('http://127.0.0.1:5000/event-insights')
-    .then((response) => response.json())
+    .then((response) => {
+      console.log('Response:', response);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => setInsights(data))
     .catch((error) => console.error('Error fetching insights:', error));
-}, []);
-
+  }, []);
+  
   if (!dashboardData) {
     return <div>Loading dashboard...</div>;
   }
