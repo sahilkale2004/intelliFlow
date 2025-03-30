@@ -151,3 +151,54 @@
 .delete-event-button:hover {
   background-color: #2563eb;
 }
+
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 300px;
+  text-align: center;
+}
+
+.auth-modal h2 {
+  margin-bottom: 15px;
+}
+
+.auth-modal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.auth-modal button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.auth-modal button:first-of-type {
+  background: #007bff;
+  color: white;
+}
+
+.auth-modal button:last-of-type {
+  background: #dc3545;
+  color: white;
+}

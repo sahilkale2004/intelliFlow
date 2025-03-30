@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Calendar, MapPin, Clock, Users, Edit, Trash, PlusCircle, RefreshCw, XCircle } from 'lucide-react';
+import { Calendar, MapPin, Clock, Users, Edit, Trash, PlusCircle, RefreshCw, XCircle, CheckCircle } from 'lucide-react';
 import './Events.css';
 import MarketingAutomation from '../components/MarketingAutomation';
 import SpeakerRecommendations from '../components/SpeakerRecommendations';
@@ -11,6 +11,8 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [authOverlay, setAuthOverlay] = useState({ show: false, mode: '', event: null });
+  const [authData, setAuthData] = useState({ email: '', password: '' });
   const [formData, setFormData] = useState({
     title: '',
     date: '',
@@ -34,6 +36,38 @@ const Events = () => {
     }
   };
 
+  const validateAuth = () => {
+    return authData.email === 'admin@example.com' && authData.password === 'admin@123';
+  };
+
+  const confirmCreate = () => {
+    if (validateAuth()) {
+      setShowForm(true);
+      setAuthOverlay({ show: false, mode: '', event: null });
+    } else {
+      alert('Authentication failed. Please check your email and password.');
+    }
+  };
+
+  const confirmEdit = () => {
+    if (validateAuth()) {
+      setSelectedEvent(authOverlay.event);
+      setFormData(authOverlay.event);
+      setAuthOverlay({ show: false, mode: '', event: null });
+    } else {
+      alert('Authentication failed. Please check your email and password.');
+    }
+  };
+
+ const confirmDelete = () => {
+  if (validateAuth()) {
+    handleDelete(authOverlay.event._id);
+    setAuthOverlay({ show: false, mode: '', event: null });
+  } else {
+    alert('Authentication failed. Please check your email and password.');
+  }
+};
+
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this event?')) return;
     try {
@@ -45,8 +79,7 @@ const Events = () => {
   };
 
   const handleEdit = (event) => {
-    setSelectedEvent(event);
-    setFormData(event);
+    setAuthOverlay({ show: true, mode: 'edit', event });
   };
 
   const handleChange = (e) => {
@@ -68,8 +101,8 @@ const Events = () => {
     <div className="events-container">
       <div className="events-header">
         <h1 className="events-title">Events</h1>
-        <button onClick={() => setShowForm(true)} className="create-event-button">
-          <PlusCircle size={18} />Create Event
+        <button onClick={() => setAuthOverlay({ show: true, mode: 'create', event: null })} className="create-event-button">
+          <PlusCircle size={18} /> Create Event
         </button>
       </div>
 
@@ -91,7 +124,8 @@ const Events = () => {
             <input type="number" name="duration" value={formData.duration} onChange={handleChange} required />
             <button type="submit"><RefreshCw size={18} /> Update Event</button>
             <button type="button" onClick={() => setSelectedEvent(null)}>
-             <XCircle size={18} /> Cancel</button>
+              <XCircle size={18} /> Cancel
+            </button>
           </form>
         </div>
       )}
@@ -128,15 +162,32 @@ const Events = () => {
                 </div>
                 <div className="event-actions">
                   <button className="edit-event-button" onClick={() => handleEdit(event)}>
-                     <Edit size={18} /> Edit Event</button>
-                  <button className="delete-event-button" onClick={() => handleDelete(event._id)}>
-                     <Trash size={18} /> Delete Event</button>
+                    <Edit size={18} /> Edit Event
+                  </button>
+                  <button
+                    className="delete-event-button"
+                     onClick={() => setAuthOverlay({ show: true, mode: 'delete', event })}
+                        >
+                      <Trash size={18} /> Delete Event
+                    </button>
                 </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      {authOverlay.show && (
+        <div className="auth-overlay">
+          <div className="auth-modal">
+            <h2>{authOverlay.mode === 'create' ? 'Create Event' : 'Admin Authentication'}</h2>
+            <input type="email" placeholder="Email" value={authData.email} onChange={(e) => setAuthData({ ...authData, email: e.target.value })} required />
+            <input type="password" placeholder="Password" value={authData.password} onChange={(e) => setAuthData({ ...authData, password: e.target.value })} required />
+            <button onClick={authOverlay.mode === 'create' ? confirmCreate : authOverlay.mode === 'edit' ? confirmEdit : confirmDelete}> <CheckCircle size={18} />Confirm</button>
+            <button onClick={() => setAuthOverlay({ show: false, mode: '', event: null })}> <XCircle size={18} />Cancel</button>
+          </div>
+        </div>
+      )}
       <MarketingAutomation />
       <SpeakerRecommendations />
       <BudgetOptimizer />
