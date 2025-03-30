@@ -43,7 +43,7 @@ def generate_insights(average_attendees, budget_utilization, task_completion):
 
     return insights
 
-@app.route("/generate_insights", methods=["POST"])
+@app.route("/generate_stats_insights", methods=["POST"])
 def generate_insights_from_request():
     """
     API endpoint to generate AI-driven insights from request data.
@@ -110,4 +110,4 @@ def generate_summary():
         return jsonify({"error": f"Failed to generate summary: {str(e)}"}), 500
     
 if __name__ == '__main__':
-    app.run(port=5005, debug=True)
+    app.run(port=5000, debug=True)

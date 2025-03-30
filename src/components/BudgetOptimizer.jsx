@@ -11,7 +11,7 @@ function BudgetOptimizer() {
 
     const fetchOptimizedBudget = async () => {
         try {
-            const response = await axios.post("http://localhost:5005/predict_budget", {
+            const response = await axios.post("http://127.0.0.1:5000/predict_budget", {
                 event_name: eventName,
                 event_type: eventType,
                 event_scale: eventScale

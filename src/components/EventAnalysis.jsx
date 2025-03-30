@@ -17,7 +17,7 @@ function PostEventAnalysis() {
         }
 
         try {
-            const response = await axios.post("http://localhost:5005/analyze_feedback", {
+            const response = await axios.post("http://127.0.0.1:5000/analyze_feedback", {
                 feedback: feedback.split("\n"),
             });
             setFeedbackResults(response.data.feedback_analysis);
@@ -34,7 +34,7 @@ function PostEventAnalysis() {
         }
 
         try {
-            const response = await axios.post("http://localhost:5005/generate_event_summary", {
+            const response = await axios.post("http://127.0.0.1:5000/generate_event_summary", {
                 event_name: eventName,
                 event_date: eventDate,
                 event_location: eventLocation,

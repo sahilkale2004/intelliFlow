@@ -19,7 +19,7 @@ function SpeakersRecommendations() {
                 return;
             }
 
-            const response = await axios.post("http://localhost:5005/recommend_speakers", {
+            const response = await axios.post("http://127.0.0.1:5000/recommend_speakers", {
                 theme: theme.trim().toLowerCase(),  // Corrected: Changed 'expertise' to 'theme'
                 budget: Number(budget),
                 role: role.trim().toLowerCase(),

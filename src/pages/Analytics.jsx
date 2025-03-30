@@ -32,7 +32,7 @@ const AnalyticsDashboard = () => {
   // Fetch AI insights data using API
   const fetchAiInsights = async (data) => {
     try {
-      const response = await fetch("http://127.0.0.1:5005/generate_insights", {
+      const response = await fetch("http://127.0.0.1:5000/generate_stats_insights", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

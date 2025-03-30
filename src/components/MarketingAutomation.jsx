@@ -14,7 +14,7 @@ function MarketingAutomation() {
     // Function to generate marketing content
     const generateContent = async () => {
         try {
-            const response = await axios.post("http://localhost:5002/generate_content", {
+            const response = await axios.post("http://127.0.0.1:5000/generate_content", {
                 event_name: eventName,
                 event_details: eventDetails,
             });
@@ -28,7 +28,7 @@ function MarketingAutomation() {
     // Analyze sentiment function for social media comments
     const analyzeSentiment = async () => {
         try {
-            const response = await axios.post("http://localhost:5002/analyze_sentiment", {
+            const response = await axios.post("http://127.0.0.1:5000/analyze_sentiment", {
                 comments: comments.split("\n"),
             });
             setSentimentResults(response.data.sentiments);
@@ -41,7 +41,7 @@ function MarketingAutomation() {
     // Sponsors recommendation function based on[event_type]
     const recommendSponsors = async () => {
         try {
-            const response = await axios.post("http://localhost:5002/recommend_sponsors", {
+            const response = await axios.post("http://127.0.0.1:5000/recommend_sponsors", {
                 event_type: eventType.trim().toLowerCase(),
             });
 

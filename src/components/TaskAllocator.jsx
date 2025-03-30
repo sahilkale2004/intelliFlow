@@ -23,7 +23,7 @@ function TaskAllocator() {
         }
 
         try {
-            const response = await axios.post("http://localhost:5001/allocate_task", {
+            const response = await axios.post("http://127.0.0.1:5000/allocate_task", {
                 task: task,
                 experience: parseInt(experience),
                 availability: parseInt(availability),
