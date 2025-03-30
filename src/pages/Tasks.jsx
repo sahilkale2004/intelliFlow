@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import io from "socket.io-client";
-import { CheckCircle2, Clock, AlertCircle, XCircle, Save, PlusCircle, Edit, Trash, RefreshCw } from "lucide-react";
+import { CheckCircle2, Clock, AlertCircle, XCircle, Save, PlusCircle, Edit, Trash, RefreshCw, Lock } from "lucide-react";
 import "./Tasks.css";
 import TaskAllocator from "../components/TaskAllocator";
 
@@ -9,9 +9,15 @@ const socket = io("http://localhost:5000");
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [showAdminPassword, setShowAdminPassword] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(
+    localStorage.getItem("isAdminAuthenticated") === "true"
+  );
+  
   const [showForm, setShowForm] = useState(false);
-
-  // State for adding a new task
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
@@ -20,93 +26,85 @@ const Tasks = () => {
     email: "",
     status: "",
   });
-
-  // State for editing an existing task
   const [editTask, setEditTask] = useState(null);
+
+  const getRandomAvatar = () => {
+  const randomNum = Math.floor(Math.random() * 70) + 1;
+  return `https://i.pravatar.cc/150?img=${randomNum}`;
+  };
+  
+  const handleInputChange = (e) => {
+  setNewTask({ ...newTask, [e.target.name]: e.target.value });
+};
+  
+  const handleEditInputChange = (e) => {
+  setEditTask({ ...editTask, [e.target.name]: e.target.value });
+};
 
   useEffect(() => {
     fetchTasks();
-
-    socket.on("new_task", (task) => {
-      setTasks((prevTasks) => [...prevTasks, task]);
-    });
-
-    socket.on("taskUpdated", (updatedTask) => {
-      setTasks((prevTasks) =>
-        prevTasks.map((task) => (task._id === updatedTask._id ? updatedTask : task))
-      );
-    });
-
-    return () => {
-      socket.off("new_task");
-      socket.off("taskUpdated");
-    };
+    socket.on("new_task", (task) => setTasks((prev) => [...prev, task]));
+    socket.on("taskUpdated", (updatedTask) => setTasks((prev) => prev.map((t) => (t._id === updatedTask._id ? updatedTask : t))));
+    return () => { socket.off("new_task"); socket.off("taskUpdated"); };
   }, []);
 
   const fetchTasks = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/tasks");
-      setTasks(response.data);
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
+    try { setTasks((await axios.get("http://localhost:5000/tasks")).data); }
+    catch (error) { console.error("Error fetching tasks:", error); }
+  };
+
+  const authenticateAdmin = (e) => {
+    e.preventDefault();
+    if (adminEmail === "admin@example.com" && adminPassword === "admin123") {
+      setIsAdminAuthenticated(true);
+      localStorage.setItem("isAdminAuthenticated", "true");
+      setShowAdminLogin(false);
+    } else alert("Invalid admin credentials");
+  };
+
+  const verifyAdminPassword = (e) => {
+    e.preventDefault();
+    if (adminPassword === "admin123") {
+      setShowAdminPassword(false);
+      return true;
+    } else {
+      alert("Incorrect password");
+      return false;
     }
-  };
-
-  const handleInputChange = (e) => {
-    setNewTask({ ...newTask, [e.target.name]: e.target.value });
-  };
-
-  const handleEditInputChange = (e) => {
-    setEditTask({ ...editTask, [e.target.name]: e.target.value });
-  };
-
-  const getRandomAvatar = () => {
-    const randomNum = Math.floor(Math.random() * 70) + 1;
-    return `https://i.pravatar.cc/150?img=${randomNum}`;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newTask.title || !newTask.description || !newTask.dueDate || !newTask.userName || !newTask.email) {
-      alert("Please fill all fields");
-      return;
-    }
-
+    if (!isAdminAuthenticated) return setShowAdminLogin(true);
+    if (!newTask.title || !newTask.description || !newTask.dueDate || !newTask.userName || !newTask.email) return alert("Please fill all fields");
     const taskWithAvatar = { ...newTask, avatar: getRandomAvatar() };
-
     try {
-      await axios.post("http://localhost:5000/tasks", taskWithAvatar);
-      fetchTasks();
-      setShowForm(false);
-      setNewTask({ title: "", description: "", dueDate: "", userName: "", email: "", status: "" });
+        await axios.post("http://localhost:5000/tasks", taskWithAvatar);
+        fetchTasks();
+        setShowForm(false);
+        setNewTask({ title: "", description: "", dueDate: "", userName: "", email: "", status: "" });
     } catch (error) {
-      console.error("Error adding task:", error);
+        console.error("Error adding task:", error);
     }
   };
-
-  const handleEdit = (task) => {
-    setEditTask(task);
-  };
-
+  
+  const handleEdit = (task) => { setShowAdminPassword(true); setEditTask(task); };
   const handleUpdate = async (e) => {
     e.preventDefault();
+    if (!verifyAdminPassword(e)) return;
     try {
       await axios.put(`http://localhost:5000/tasks/${editTask._id}`, editTask);
-      fetchTasks();
-      setEditTask(null);
-    } catch (error) {
-      console.error("Error updating task:", error);
-    }
+      fetchTasks(); setEditTask(null);
+    } catch (error) { console.error("Error updating task:", error); }
   };
 
   const handleDelete = async (id) => {
+    if (!verifyAdminPassword(new Event("submit"))) return;
     if (!window.confirm('Are you sure you want to delete this task?')) return;
     try {
       await axios.delete(`http://localhost:5000/tasks/${id}`);
       setTasks(tasks.filter(task => task._id !== id));
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) { console.error(err); }
   };
 
   return (
@@ -117,6 +115,28 @@ const Tasks = () => {
           <PlusCircle size={18} /> Add Task
         </button>
       </div>
+
+      {showAdminLogin && (
+        <div className="admin-overlay">
+          <form onSubmit={authenticateAdmin} className="admin-form">
+            <h2>Admin Login</h2>
+            <input type="email" placeholder="Admin Email" value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} required />
+            <input type="password" placeholder="Admin Password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} required />
+            <button type="submit"><Lock size={18} /> Login</button>
+            <button onClick={() => setShowAdminLogin(false)}><XCircle size={18} /> Cancel</button>
+          </form>
+        </div>
+      )}
+      {showAdminPassword && (
+        <div className="admin-overlay">
+          <form onSubmit={verifyAdminPassword} className="admin-form">
+            <h2>Enter Admin Password</h2>
+            <input type="password" placeholder="Admin Password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} required />
+            <button type="submit"><Lock size={18} /> Verify</button>
+            <button onClick={() => setShowAdminPassword(false)}><XCircle size={18} /> Cancel</button>
+          </form>
+        </div>
+      )}
 
       <div className="tasks-grid">
         {["To Do", "In Progress", "Completed"].map((status) => (
