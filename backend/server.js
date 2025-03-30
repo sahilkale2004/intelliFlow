@@ -160,6 +160,22 @@ app.get("/tasks", async (req, res) => {
   }
 });
 
+const sendEmail = (to, subject, htmlContent) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html: htmlContent,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Error sending email:", error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+};
 // Update Task & Send Email Notification
 app.put("/tasks/:id", async (req, res) => {
   try {

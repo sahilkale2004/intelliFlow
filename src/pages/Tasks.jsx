@@ -185,6 +185,12 @@ const Tasks = () => {
               <input type="text" name="title" value={editTask.title} onChange={handleEditInputChange} required />
               <textarea name="description" value={editTask.description} onChange={handleEditInputChange} required />
               <input type="date" name="dueDate" value={editTask.dueDate} onChange={handleEditInputChange} required />
+              <select name="status" value={editTask.status} onChange={handleEditInputChange}>
+              <option value="">Select Status</option>
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              </select>
               <button type="submit"><RefreshCw size={18} /> Update Task</button>
               <button type="button" onClick={() => setEditTask(null)}><XCircle size={18} /> Cancel</button>
             </form>
