@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "./speakers_judges.css";  
 
@@ -6,37 +6,39 @@ function SpeakersRecommendations() {
     const [theme, setTheme] = useState("");
     const [budget, setBudget] = useState("");
     const [date, setDate] = useState("");
-    const [role, setRole] = useState("Speaker");
+    const [role, setRole] = useState("speaker");
     const [recommendations, setRecommendations] = useState([]);
-    const [error, setError] = useState("");  
+    const [error, setError] = useState("");
 
-    // Fetch recommended speakers or judges
     const fetchRecommendations = async () => {
         try {
-            setError("");
+            setError(""); // Reset error before new request
+            
+            if (!theme || !budget || isNaN(Number(budget))) {
+                setError("Please enter valid theme and budget.");
+                return;
+            }
+
             const response = await axios.post("http://localhost:5005/recommend_speakers", {
-                theme, 
-                budget: Number(budget),  
-                role,
+                theme: theme.trim().toLowerCase(),  // Corrected: Changed 'expertise' to 'theme'
+                budget: Number(budget),
+                role: role.trim().toLowerCase(),
+                date: date,
             });
 
             console.log("API Response:", response.data);
 
-            if (response.data.error) {
-                setError(response.data.error);
-                setRecommendations([]);
+            if (response.data.recommendations.length > 0) {
+                setRecommendations(response.data.recommendations);
             } else {
-                setRecommendations([...response.data.recommendations || []]);
+                setRecommendations([]);
+                setError("No matching recommendations found.");
             }
         } catch (error) {
+            console.error("Error fetching recommendations:", error);
             setError("Failed to fetch recommendations. Please try again.");
-            setRecommendations([]);
         }
     };
-
-    useEffect(() => {
-        console.log("Updated Recommendations:", recommendations);
-    }, [recommendations]);
 
     return (
         <div className="speaker-container">
@@ -44,7 +46,7 @@ function SpeakersRecommendations() {
 
             <input
                 type="text"
-                placeholder="Event Theme"
+                placeholder="Theme (e.g., AI, Cybersecurity)"
                 value={theme}
                 onChange={(e) => setTheme(e.target.value)}
             />
@@ -59,21 +61,21 @@ function SpeakersRecommendations() {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
             />
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-                <option value="Speaker">Speaker</option>
-                <option value="Judge">Judge</option>
+            <select value={role} onChange={(e) => setRole(e.target.value.toLowerCase())}>
+                <option value="speaker">Speaker</option>
+                <option value="judge">Judge</option>
             </select>
             <button onClick={fetchRecommendations}>Get Recommendations</button>
 
-            {error && <p>{error}</p>}  
+            {error && <p className="error-message">{error}</p>}  
 
             <h3>Recommended {role}s:</h3>
             {recommendations.length > 0 ? (
                 <ul>
                     {recommendations.map((rec, index) => (
                         <li key={index}>
-                            <strong>{rec.Name}</strong> - {rec.Expertise} <br />
-                            Budget: ${rec.budget} | Rating: {rec.Rating}/5
+                            <strong>{rec.name}</strong> - {rec.expertise} <br />
+                            Budget: ${rec.budget} | Rating: {rec.rating}/5
                         </li>
                     ))}
                 </ul>
