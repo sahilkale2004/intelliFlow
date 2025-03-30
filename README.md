@@ -18,17 +18,35 @@ Ensure you have the following installed:
     git clone https://github.com/your-repo/project-name.git
     
     cd project-name
+### 3️⃣ Create a react project
 
-### 3️⃣ Backend Setup (Flask & Python)
+    npx create-react-app your_app_name
+
+    cd your_app_name
+
+    npm start
+    
+
+### 4️⃣ Backend Setup (Flask & Python)
 
 🔹 Create a Virtual Environment
 
     python -m venv venv
+    
 🔹 Install Python Packages
 
     pip install google-generativeai flask flask-cors pandas numpy scikit-learn textblob vaderSentiment pymongo
+    
+🔹 Initialize backend server for connecting frontend & backend 
 
-### 4️⃣ Set Up Environment Variables
+    npm init -y
+
+🔹 Install Python Packages 
+
+    pip install express dotenv mongoose nodemailer socket.io cors 
+   
+
+### 5️⃣ Set Up Environment Variables
 
     GEMINI_API_KEY=your_google_gemini_api_key
     
@@ -48,10 +66,16 @@ Ensure the following JSON files exist in the root directory:
 
 * analytics_data.json
 
+7️⃣ Run the Flask Server
 
-* 
+    python app.py
 
-If missing, create them and struc
+8️⃣ Run the node Server
+
+    node  index.js
+
+
+
 
 
 
