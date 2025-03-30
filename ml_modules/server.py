@@ -359,7 +359,7 @@ def generate_insights():
         Provide a one-line insight predicting estimated final attendance, best marketing strategy, or resource allocation.
         """
         try:
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            model = genai.GenerativeModel("gemini-1.5-flash")
             response = model.generate_content(prompt)
             insight = response.text.strip().split("\n")[0]  
             predictions.append({
