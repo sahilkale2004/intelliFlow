@@ -41,9 +41,9 @@ Ensure you have the following installed:
 
     npm init -y
 
-🔹 Install Python Packages 
+🔹 Install NPM Packages 
 
-    pip install express dotenv mongoose nodemailer socket.io cors 
+    npm install express dotenv mongoose nodemailer socket.io cors 
    
 
 ### 5️⃣ Set Up Environment Variables
