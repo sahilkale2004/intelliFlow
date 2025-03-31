@@ -73,7 +73,6 @@ Ensure the following JSON files exist in the root directory:
 8️⃣ Run the node Server
 
     node  index.js
-    .
 
 ### 📌 Key Features & Functionality
 1️⃣ Dashboard
