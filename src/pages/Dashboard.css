@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Boldonse&display=swap');
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -48,14 +50,24 @@
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  font-size: 2rem;
-  font-weight: bold;
+  font-family: "Boldonse", system-ui;
+  font-weight: 200;
+  font-style: normal;
+  font-size: 1.5rem;
+  letter-spacing: 2.5px;
   padding: 10px 20px;
   border-radius: 8px;
   z-index: 2;
 }
 
+.dashboard-title p{
+  font-family: "Boldonse", system-ui;
+  font-weight: 200;
+  font-style: normal;
+  font-size: 1.2rem;
+}
 .dashboard-title {
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 24px;
   font-weight: bold;
   color: #1a202c;
@@ -64,10 +76,18 @@
 }
 
 .dashboard-stats-grid {
+  font-family: Arial, Helvetica, sans-serif;
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 16px;
   margin: 0 15px;
+}
+
+.dashboard-stats-grid title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1a202c;
+  margin-bottom: 16px;
 }
 
 @media (min-width: 768px) {
@@ -83,7 +103,7 @@
 }
 
 .stat-card {
-  background: white;
+  background: #F5F5F1 !important;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 16px;
@@ -149,14 +169,15 @@
 }
 
 .card {
-  background: white;
+  background:#F5F5F1;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 24px;
 }
 
 .card-title {
-  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 16px;
 }
@@ -172,7 +193,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  background: #f7fafc;
+  background: #FDFBEE ;
   border-radius: 8px;
 }
 
@@ -188,10 +209,11 @@
 }
 
 .event-status {
+  font-family: Arial, Helvetica, sans-serif;
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: 24px;
   color: #047857;
-  background: #d1fae5;
+  background: #FDFBEE;
   border-radius: 12px;
 }
 
@@ -206,7 +228,7 @@
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: #e0e7ff;
+  background-color: #FDFBEE !important;
   border-radius: 8px;
 }
 
@@ -219,4 +241,5 @@
 .insight-text {
   font-size: 14px;
   color: #312e81;
+  background-color: #FDFBEE;
 }

@@ -53,82 +53,83 @@ function MarketingAutomation() {
         }
     };
 
-    return (
-        <div className="marketing-container">
-            <h2>AI Marketing Automation</h2>
+   return (
+  <div className="marketing-container">
+    <div className="marketing-content">
+      <h2>AI Marketing Automation</h2>
+      <input
+        type="text"
+        placeholder="Event Name"
+        value={eventName}
+        onChange={(e) => setEventName(e.target.value)}
+      />
+      <textarea
+        placeholder="Event Details"
+        value={eventDetails}
+        onChange={(e) => setEventDetails(e.target.value)}
+      />
+      <button onClick={generateContent}>Generate Content</button>
+      <h3>Generated Content:</h3>
+      <p>{generatedContent || "No content generated yet."}</p>
+    </div>
 
-            {/* Event Content Generation */}
-            <input
-                type="text"
-                placeholder="Event Name"
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
-            />
-            <textarea
-                placeholder="Event Details"
-                value={eventDetails}
-                onChange={(e) => setEventDetails(e.target.value)}
-            />
-            <button onClick={generateContent}>Generate Content</button>
+    <div className="sentiment-content">
+      <h2>Smart Sentiment Analysis</h2>
+      <textarea
+        placeholder="Enter Social Media Comments (One per line)"
+        value={comments}
+        onChange={(e) => setComments(e.target.value)}
+      />
+      <button onClick={analyzeSentiment}>Analyze Sentiment</button>
+      <h3>Sentiment Analysis:</h3>
+      {sentimentResults.length > 0 ? (
+        sentimentResults.map((res, index) => (
+          <p key={index}>
+            {res.comment}: <strong>{res.sentiment}</strong>
+          </p>
+        ))
+      ) : (
+        <p>No sentiment analysis yet.</p>
+      )}
+    </div>
 
-            <h3>Generated Content:</h3>
-            <p>{generatedContent || "No content generated yet."}</p>
-
-            {/* Sentiment Analysis */}
-            <h2>Smart Sentiment Analysis</h2>
-            <textarea
-                placeholder="Enter Social Media Comments (One per line)"
-                value={comments}
-                onChange={(e) => setComments(e.target.value)}
-            />
-            <button onClick={analyzeSentiment}>Analyze Sentiment</button>
-
-            <h3>Sentiment Analysis:</h3>
-            {sentimentResults.length > 0 ? (
-                sentimentResults.map((res, index) => (
-                    <p key={index}>{res.comment}: <strong>{res.sentiment}</strong></p>
-                ))
-            ) : (
-                <p>No sentiment analysis yet.</p>
-            )}
-
-            {/* Sponsor Recommendation */}
-            <h2>Sponsor Recommendation</h2>
-            <input
-                type="text"
-                placeholder="Enter Event Type (e.g., Hackathons)"
-                value={eventType}
-                onChange={(e) => setEventType(e.target.value)}
-            />
-            <button onClick={recommendSponsors}>Recommend Sponsors</button>
-
-            <h3>Suggested Sponsors:</h3>
-            {sponsors.length > 0 ? (
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Industry</th>
-                            <th>Sponsorship Type</th>
-                            <th>Average Sponsorship Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sponsors.map((sponsor, index) => (
-                            <tr key={index}>
-                                <td>{sponsor.name}</td>
-                                <td>{sponsor.industry}</td>
-                                <td>{sponsor.sponsorship_type.join(', ')}</td>
-                                <td>{sponsor.average_sponsorship_amount}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            ) : (
-                <p>No sponsors recommended yet.</p>
-            )}
-        </div>
-    );
+    <div className="sponsor-content">
+      <h2>Sponsor Recommendation</h2>
+      <input
+        type="text"
+        placeholder="Enter Event Type (e.g., Hackathons)"
+        value={eventType}
+        onChange={(e) => setEventType(e.target.value)}
+      />
+      <button onClick={recommendSponsors}>Recommend Sponsors</button>
+      <h3>Suggested Sponsors:</h3>
+      {sponsors.length > 0 ? (
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Industry</th>
+              <th>Sponsorship Type</th>
+              <th>Average Sponsorship Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sponsors.map((sponsor, index) => (
+              <tr key={index}>
+                <td>{sponsor.name}</td>
+                <td>{sponsor.industry}</td>
+                <td>{sponsor.sponsorship_type.join(', ')}</td>
+                <td>{sponsor.average_sponsorship_amount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No sponsors recommended yet.</p>
+      )}
+    </div>
+  </div>
+);
 }
 
 export default MarketingAutomation;

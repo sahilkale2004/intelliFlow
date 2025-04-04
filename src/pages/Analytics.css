@@ -48,6 +48,12 @@
   color: #4a5568;
 }
 
+.stat-icon {
+    height: 24px;
+    width: 24px;
+    color: black;
+}  
+
 .stat-value {
   margin-top: 4px;
   font-size: 24px;
