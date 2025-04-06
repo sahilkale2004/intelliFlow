@@ -41,7 +41,7 @@ function MarketingAutomation() {
     // Sponsors recommendation function based on[event_type]
     const recommendSponsors = async () => {
         try {
-            const response = await axios.post("http://127.0.0.1:5000/recommend_sponsors", {
+            const response = await axios.post("http://127.0.0.1:5001/recommend_sponsors", {
                 event_type: eventType.trim().toLowerCase(),
             });
 
