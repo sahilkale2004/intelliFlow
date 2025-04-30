@@ -3,7 +3,6 @@ from flask_cors import CORS
 import pandas as pd
 import numpy as np
 import json
-import os
 from sklearn.neighbors import NearestNeighbors
 
 # Load the sponsors data
